@@ -1,0 +1,19 @@
+.course-card {
+  transition: box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.course-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.course-category {
+  font-size: 0.875rem;
+  color: #6366f1;
+  font-weight: 500;
+}

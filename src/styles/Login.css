@@ -1,0 +1,147 @@
+/* Lokasi file: src/styles/Login.css */
+
+/* Container utama untuk seluruh halaman login */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Kartu putih yang berisi dua kolom */
+.login-container {
+  display: grid;
+  grid-template-columns: 4fr 5fr;
+  max-width: 950px;
+  width: 100%;
+  margin: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* Kolom kiri untuk logo */
+.logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc;
+  padding: 2rem;
+}
+
+.logo-img {
+  max-width: 75%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Kolom kanan untuk form login */
+.form-section {
+  padding: 3rem 3.5rem;
+}
+
+.form-title {
+  color: #6b7280;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.form-subtitle {
+  color: #0d9488;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+}
+
+/* Grup untuk setiap input */
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-label {
+  position: absolute;
+  left: 3.5rem;
+  top: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.input-field {
+  width: 100%;
+  padding: 1.25rem 1rem 0.5rem 3.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: #f3f4f6;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  box-sizing: border-box;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/* Tombol Login */
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: #0d9488;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+.login-button:hover {
+  background-color: #0f766e;
+}
+
+.login-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Pesan Error */
+.error-message {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  .login-container {
+    grid-template-columns: 1fr;
+  }
+  .logo-section {
+    display: none;
+  }
+  .form-section {
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,33 @@
+.edit-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #f0f4ff; /* Sedikit biru agar beda dari Add */
+}
+
+.form-edit input {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-edit button {
+  background-color: #22c55e; /* hijau */
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+
+.form-edit button:hover {
+  background-color: #16a34a;
+}
