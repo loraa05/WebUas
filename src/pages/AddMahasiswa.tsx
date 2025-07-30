@@ -1,137 +1,123 @@
-// Simpan sebagai src/components/AddMahasiswa.tsx
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "../utils/supabase"; // Pastikan path ini benar
-import "../styles/AddMahasiswa.css"; // Pastikan path ini benar
-
-// 1. Definisikan interface untuk tipe data form agar lebih aman dan jelas.
-interface MahasiswaFormData {
-  nim: string;
-  name: string;
-  gender: string;
-  birthdate: string;
-  address: string;
-  contact: string;
-  status: boolean;
-}
+import supabase from "../utils/supabase";
+import "../styles/AddMahasiswa.css"; 
 
 const AddMahasiswa: React.FC = () => {
   const navigate = useNavigate();
+  const [nim, setNim] = useState('');
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [address, setAddress] = useState('');
+  const [contact, setContact] = useState('');
+  const [status, setStatus] = useState(true);
 
-  // 2. Gunakan interface untuk memberi tipe pada state `useState`.
-  const [formData, setFormData] = useState<MahasiswaFormData>({
-    nim: "",
-    name: "",
-    gender: "", // Dikosongkan agar placeholder "Pilih Gender" muncul
-    birthdate: "",
-    address: "",
-    contact: "",
-    status: true, // Default status aktif
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // 3. Beri tipe yang benar pada event handler.
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate('/login');
+        }
+      } catch (err) {
+        console.error("Gagal memeriksa sesi:", err);
+        navigate('/login'); 
+      }
+    };
+    checkSession();
+  }, [navigate]);
 
-    // Gunakan type assertion untuk menangani properti 'checked' yang hanya ada di HTMLInputElement
-    const newValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: newValue,
-    }));
-  };
-
-  // 4. Beri tipe pada event submit form.
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
-    if (!formData.nim || !formData.name || !formData.gender || !formData.birthdate) {
-      alert("Field NIM, Nama, Gender, dan Tanggal Lahir wajib diisi.");
+    const formData = { nim, name, gender, birthdate, address, contact, status };
+
+    if (!nim || !name || !gender || !birthdate) {
+      setError("Field dengan tanda bintang (*) wajib diisi.");
+      setIsSubmitting(false);
       return;
     }
 
-    // Objek `formData` sudah memiliki tipe yang sesuai dengan tabel Supabase
-    const { error } = await supabase.from("mahasiswa").insert([formData]);
+    const { error: insertError } = await supabase.from("mahasiswa").insert([formData]);
 
-    if (error) {
-      alert("Gagal menambahkan data mahasiswa: " + error.message);
-      console.error("Supabase Error:", error);
+    if (insertError) {
+      setError("Gagal menambahkan data: " + insertError.message);
     } else {
-      alert("Data mahasiswa berhasil ditambahkan!");
+      alert("Data berhasil ditambahkan!");
       navigate("/mahasiswa");
     }
+    setIsSubmitting(false);
   };
 
   return (
-    <div className="add-container">
-      <h2>Tambah Data Mahasiswa</h2>
-      <form onSubmit={handleSubmit} className="form-add">
-        <input
-          type="text"
-          name="nim"
-          placeholder="NIM (contoh: 418230100099)"
-          value={formData.nim}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Nama Lengkap"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          required
-        >
-          {/* Nilai "" cocok dengan state awal agar placeholder ini terpilih */}
-          <option value="" disabled>Pilih Jenis Kelamin</option>
-          <option value="L">Laki-laki</option>
-          <option value="P">Perempuan</option>
-        </select>
-        <input
-          type="date"
-          name="birthdate"
-          value={formData.birthdate}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Alamat"
-          value={formData.address}
-          onChange={handleChange}
-          required // Sesuai tabel, address tidak boleh null
-        />
-        <input
-          type="text"
-          name="contact"
-          placeholder="No. Kontak / HP"
-          value={formData.contact}
-          onChange={handleChange}
-          required // Sesuai tabel, contact tidak boleh null
-        />
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            name="status"
-            checked={formData.status}
-            onChange={handleChange}
-          />
-          Status Aktif
-        </label>
-        <button type="submit">Tambah Mahasiswa</button>
-      </form>
+    <div className="page-container">
+      <header className="page-header">
+        <div className="header-content">
+          <div className="header-logo">Elearning MMA</div>
+          <button onClick={() => navigate('/mahasiswa')} className="logout-button">Kembali</button>
+        </div>
+      </header>
+      <main className="main-content">
+        <div className="add-container">
+          <h2>Tambah Mahasiswa Baru</h2>
+          <form onSubmit={handleSubmit} className="form-add">
+            {/* Input NIM */}
+            <div className="form-group">
+              <label htmlFor="nim">NIM *</label>
+              <input id="nim" value={nim} onChange={(e) => setNim(e.target.value)} required />
+            </div>
+            {/* Input Nama */}
+            <div className="form-group">
+              <label htmlFor="name">Nama *</label>
+              <input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            {/* Input Gender */}
+            <div className="form-group">
+              <label htmlFor="gender">Gender *</label>
+              <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
+                <option value="" disabled>Pilih Gender</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+            {/* Input Tanggal Lahir */}
+            <div className="form-group">
+              <label htmlFor="birthdate">Tanggal Lahir *</label>
+              <input id="birthdate" type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} required />
+            </div>
+            {/* Input Alamat */}
+            <div className="form-group form-group-full">
+              <label htmlFor="address">Alamat</label>
+              <input id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+            </div>
+            {/* Input Kontak */}
+            <div className="form-group form-group-full">
+              <label htmlFor="contact">Kontak</label>
+              <input id="contact" value={contact} onChange={(e) => setContact(e.target.value)} />
+            </div>
+            {/* Checkbox Status */}
+            <label className="checkbox-label">
+              <input type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
+              Status Aktif
+            </label>
+            {/* Tombol Aksi */}
+            <div className="form-actions">
+              <button type="button" onClick={() => navigate('/mahasiswa')} className="btn-secondary">Batal</button>
+              <button type="submit" className="btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? 'Menyimpan...' : 'Tambah'}
+              </button>
+            </div>
+            {/* Pesan Error */}
+            {error && <p className="error-message">{error}</p>}
+          </form>
+        </div>
+      </main>
     </div>
   );
 };

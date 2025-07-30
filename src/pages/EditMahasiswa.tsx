@@ -1,11 +1,8 @@
-// Simpan sebagai src/components/EditMahasiswa.tsx
-
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import supabase from "../utils/supabase";
-import "../styles/AddMahasiswa.css"; // Menggunakan kembali style yang sama
+import "../styles/AddMahasiswa.css"; 
 
-// Interface untuk data form, bisa dipindahkan ke file types terpusat
 interface MahasiswaData {
   name: string;
   gender: string;
@@ -15,7 +12,6 @@ interface MahasiswaData {
   status: boolean;
 }
 
-// Komponen untuk UI saat loading (opsional tapi sangat direkomendasikan)
 const FormSkeleton = () => (
   <div className="form-add animate-pulse">
     <div className="h-10 bg-gray-200 rounded-md w-full mb-4"></div>
@@ -32,13 +28,11 @@ const EditMahasiswa: React.FC = () => {
   const navigate = useNavigate();
   const { nim } = useParams<{ nim: string }>(); // Memberi tipe pada params
 
-  // 1. Tambahkan state untuk loading, error, dan proses submit
   const [formData, setFormData] = useState<MahasiswaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 2. Gunakan useCallback untuk membungkus fungsi fetch data
   const fetchData = useCallback(async (studentNim: string) => {
     setLoading(true);
     setError(null);

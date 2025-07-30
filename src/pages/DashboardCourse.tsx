@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import supabase from '../utils/supabase';
 
-// Tipe data kursus
 interface Course {
   id: number;
   title: string;
@@ -10,7 +9,6 @@ interface Course {
   created_at: string;
 }
 
-// Komponen Skeleton Loader
 const LoadingSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     {Array.from({ length: 4 }).map((_, index) => (

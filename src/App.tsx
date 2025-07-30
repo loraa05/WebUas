@@ -1,6 +1,6 @@
 // Lokasi file: src/App.tsx
 
-import React from 'react'; // 'useState' tidak diperlukan di sini
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import MahasiswaDashboard from "./pages/MahasiswaDashboard";
@@ -13,13 +13,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         
-        {/* --- PERBAIKAN DI SINI --- */}
         <Route path="/mahasiswa" element={<MahasiswaDashboard />} />
-        
         <Route path="/add" element={<AddMahasiswa />} />
-        <Route path="/edit/:id" element={<EditMahasiswa />} />
-        <Route path="/detail/:id" element={<MahasiswaDetail />} />
+        
+        {/* --- PERBAIKAN: Gunakan :nim agar cocok dengan Dashboard --- */}
+        <Route path="/edit/:nim" element={<EditMahasiswa />} />
+        <Route path="/detail/:nim" element={<MahasiswaDetail />} />
       </Routes>
     </Router>
   );
